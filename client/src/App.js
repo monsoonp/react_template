@@ -59,7 +59,6 @@ class App extends Component {
           {/*mytable.map(tab => <showTable table={tab}/>)*/}
           {mytable && mytable.map(t => {
               return(
-                
                 <div key={t.id}><img src={t.image} style={{width:100, height:50}} alt={t.username}/>{t.username}({t.email})</div>
               );
           })}

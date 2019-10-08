@@ -24,7 +24,7 @@ class AddingForm extends React.Component {
             email:"",
             fileName:""
         });
-        //window.location.reload();
+        window.location.reload();
     }
 
     handleFileChange = (e) => {

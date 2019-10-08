@@ -7,6 +7,16 @@ const port = process.env.PORT || 5000;
 //app.use(bodyParser.urlencoded({ extended: true }));
 
 const data = fs.readFileSync("./db-config.json");
+/*
+// db-config.json
+{
+    "host"     : "localhost",
+    "user"     : "tester",
+    "password" : "1234",
+    "port"     : 3306,
+    "database" : "example"
+}
+*/
 const conf = JSON.parse(data);
 const mysql = require('mysql');
 

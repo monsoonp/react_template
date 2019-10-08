@@ -1,0 +1,52 @@
+const express = require('express');
+const fs = require('fs');
+//const bodyParser = require('body-parser');
+const app = express();
+const port = process.env.PORT || 5000;
+//app.use(bodyParser.json());
+//app.use(bodyParser.urlencoded({ extended: true }));
+
+const data = fs.readFileSync("./db-config.json");
+const conf = JSON.parse(data);
+const mysql = require('mysql');
+
+const multer = require('multer');   //multer 라이브러리 중복되지 않는 형태로 업로드
+const upload = multer({dest: './upload'})
+
+const conn = mysql.createConnection({
+    host: conf.host,
+    user: conf.user,
+    password: conf.password,
+    port: conf.port,
+    database: conf.database
+})
+//conn.connect();
+
+app.get('/api/list', (req, res) => {
+    conn.query("SELECT * FROM MYTABLE", (err, rows, fields) => {
+        res.send(rows);
+    })
+     
+});
+app.get('/api/date', (req, res) => {
+    conn.query("SELECT NOW() as now", (err, rows, fields) => {
+        res.send(rows);
+    })
+});
+app.get('/query/:id', (req, res) => {
+    res.send({"id":req.query.id,"name":req.query.name, "path":req.params.id});
+});
+
+app.use('/image', express.static('./upload'));
+app.post('/api/list', upload.single('image'), (req, res) =>{
+    let sql = 'INSERT INTO MYTABLE values (null,?,?,?)';
+    let image = '/image/' + req.file.filename;
+    let name = req.body.name;
+    let email = req.body.email;
+    let params = [name, email, image];
+    conn.query(sql, params, (err, rows, fields) =>{
+        res.send(rows);
+    });
+});
+
+app.listen(port, () => console.log(`Listening on port ${port}`));

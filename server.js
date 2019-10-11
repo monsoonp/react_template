@@ -2,6 +2,8 @@ const express = require('express');
 const fs = require('fs');
 //const bodyParser = require('body-parser');
 const app = express();
+//var iconv  = require('iconv').iconv; //인코딩을 변환 해주는 모듈, 필자는 iconv보다 iconv-lite를 선호한다.
+//const charset = require('charset') //해당 사이트의 charset값을 알 수 있게 해준다.
 const port = process.env.PORT || 5000;
 //app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded({ extended: true }));
@@ -32,6 +34,7 @@ const conn = mysql.createConnection({
 })
 //conn.connect();
 
+//test
 app.get('/api/list', (req, res) => {
     conn.query("SELECT * FROM MYTABLE", (err, rows, fields) => {
         res.send(rows);
@@ -59,4 +62,29 @@ app.post('/api/list', upload.single('image'), (req, res) =>{
     });
 });
 
+// demo
+//sigungu list
+app.get('/address', (req, res) => {
+    conn.query("SELECT * from address group by sigungu", (err, rows, fields) => {
+        res.send(rows);
+    })
+});
+//dong list
+app.get('/address/:sigungu', (req, res) => {
+    conn.query(`SELECT (@ROWNUM:=@ROWNUM+1) as num,list.* from (SELECT * from address where sigungu='${req.params.sigungu}' group by dong) list, (SELECT @ROWNUM := 0) R limit 20`, (err, rows, fields) => {
+        res.send(rows);
+    })
+});
+//street list
+app.get('/address/:sigungu/:dong', (req, res) => {
+    conn.query(`SELECT * from address where sigungu='${req.params.sigungu}' and dong='${req.params.dong}' group by street limit 10`, (err, rows, fields) => {
+        res.send(rows);
+    })
+});
+//table list
+app.get('/address/:sigungu/:dong/:street', (req, res) => {
+    conn.query(`SELECT * from address where sigungu='${req.params.sigungu}' and dong='${req.params.dong}' and street='${req.params.street}'`, (err, rows, fields) => {
+        res.send(rows);
+    })
+});
 app.listen(port, () => console.log(`Listening on port ${port}`));

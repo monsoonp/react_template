@@ -14,17 +14,19 @@ class AddingForm extends React.Component {
     }
 
     handleFormSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         this.addCustomer().then((response) => {
             console.log(response.data);
-        })
+        });
+        
         this.setState({
             file: null,
             username:"",
             email:"",
             fileName:""
         });
-        window.location.reload();
+    
+        //window.location.reload();
     }
 
     handleFileChange = (e) => {

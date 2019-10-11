@@ -125,14 +125,9 @@ const Address=(props)=> {
               <Grid item xs={10}>
                 <Paper className={classes.paper}style={rowStyle}>
                   {/* main content */}
-                                    
-                  <div style={addressList}>
+                  <div style={addressList}></div>            
                   <Route path={`${props.match.url}/:sigungu/:dong/:street`} component={TableList}/>
-                                    
-                  {/*<AddressList gungu={this.state.gungu} list={this.state.addr.filter((val, i) => this.state.gungu === val.sigun && val.street === this.state.street)}/>*/}
-                  {/*"sido","sigun","dong","구주소본번","구주소부번","street","새주소본번","새주소부번","건물명","상세건물명","X좌표","Y좌표"*/}
-                    
-                  </div>
+                  
                 </Paper>
               </Grid>
               

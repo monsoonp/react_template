@@ -65,13 +65,13 @@ app.post('/api/list', upload.single('image'), (req, res) =>{
 // demo
 //sigungu list
 app.get('/address', (req, res) => {
-    conn.query("SELECT * from address group by sigungu", (err, rows, fields) => {
+    conn.query("SELECT id, sigungu from address group by sigungu", (err, rows, fields) => {
         res.send(rows);
     })
 });
 //dong list
 app.get('/address/:sigungu', (req, res) => {
-    conn.query(`SELECT (@ROWNUM:=@ROWNUM+1) as num,list.* from (SELECT * from address where sigungu='${req.params.sigungu}' group by dong) list, (SELECT @ROWNUM := 0) R limit 20`, (err, rows, fields) => {
+    conn.query(`SELECT (@ROWNUM:=@ROWNUM+1) as num, list.id, list.sigungu, list.dong  from (SELECT * from address where sigungu='${req.params.sigungu}' group by dong) list, (SELECT @ROWNUM := 0) R limit 20`, (err, rows, fields) => {
         res.send(rows);
     })
 });

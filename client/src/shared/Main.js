@@ -6,6 +6,7 @@ import {CssBaseline, Drawer, AppBar, Toolbar, List, Typography, Divider, IconBut
 //import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import MainListItems from 'components/MainListItems';
@@ -104,7 +105,7 @@ const useStyles = makeStyles(theme => ({
     overflow: 'auto',
   },
   container: {
-    paddingTop: theme.spacing(4),
+    paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(4),
   },
   paper: {
@@ -165,9 +166,13 @@ function Main() {
                 {/*badge button*/}
                 <NavLink exact to="/">
                   <IconButton color="inherit">
+                    <ExitToAppIcon color="secondary" fontSize="large"/>
+                    {/*
+                    // primary, secondary, action, error & disabled
                     <Badge badgeContent={2} color="secondary">
                         <NotificationsIcon />
                     </Badge>
+                    */}
                   </IconButton>
                 </NavLink>
             </Toolbar>
@@ -196,14 +201,12 @@ function Main() {
             {/* main contents */}
             <main className={classes.content}>
               <div className={classes.appBarSpacer} />
-              <Container maxWidth="lg" className={classes.container}>
+              <Container maxWidth="xl" className={classes.container}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                   
                       {/*<Route path={`/address/:name`} component={Test}/> */}
                       <Route path="/address" component={Address}/>
-                        
-                    
                     
                     {/*
                     <Route exact path="/" component={Home}/>   exact 컴포넌트 주소 구분 

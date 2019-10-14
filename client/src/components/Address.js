@@ -106,7 +106,7 @@ const Address=(props)=> {
                 </Grid>
                 <Grid item xs={1}>
                   <Paper className={classes.paper}>
-                    <NavLink exact to="/">
+                    <NavLink exact to={`${props.match.url}`}>
                       <Button variant="info">exit</Button>
                     </NavLink>
                   </Paper>

@@ -4,13 +4,14 @@ import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import {Table,TableBody,TableCell,TableHead,TablePagination,TableRow,TableSortLabel} from '@material-ui/core';
 import {Toolbar,Typography,Paper,Checkbox,IconButton,Tooltip,FormControlLabel,Switch} from '@material-ui/core/';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
+//import DeleteIcon from '@material-ui/icons/Delete';
+//import FilterListIcon from '@material-ui/icons/FilterList';
+import MapModal from './MapModal';
 
+/*
 function createData(name, calories, fat, carbs, protein, m, n, o) {
   return { name, calories, fat, carbs, protein, m, n, o };
 }
-
 const rows = [
   createData('Cupcake', 305, 3.7, 67, 4.3,1,1,1),
   createData('Donut', 452, 25.0, 51, 4.9,1,1,1),
@@ -26,7 +27,7 @@ const rows = [
   createData('Nougat', 360, 19.0, 9, 37.0,1,1,1),
   createData('Oreo', 437, 18.0, 63, 4.0,1,1,1),
 ];
-
+*/
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -52,14 +53,15 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-  { id: 'sido', numeric: false, disablePadding: false, label: '시도' },
-  { id: 'sigungu', numeric: false, disablePadding: false, label: '시군구' },
-  { id: 'dong', numeric: false, disablePadding: false, label: '읍면동' },
-  { id: 'street', numeric: false, disablePadding: false, label: '거리명' },
+  { id: 'sido', numeric: false, disablePadding: true, label: '시도' },
+  { id: 'sigungu', numeric: false, disablePadding: true, label: '시군구' },
+  { id: 'dong', numeric: false, disablePadding: true, label: '읍면동' },
+  { id: 'street', numeric: false, disablePadding: true, label: '거리명' },
   { id: 'mainNum', numeric: true, disablePadding: false, label: '본번' },
   { id: 'subNum', numeric: true, disablePadding: false, label: '부번' },
-  { id: 'building', numeric: false, disablePadding: false, label: '건물명' },
-  { id: 'buildingDetail', numeric: false, disablePadding: false, label: '상세건물명' },
+  { id: 'building', numeric: false, disablePadding: true, label: '건물명' },
+  { id: 'buildingDetail', numeric: false, disablePadding: true, label: '상세건물명' },
+  { id: 'location', numeric: false, disablePadding: false, label: '위치' },
 ];
 
 function EnhancedTableHead(props) {
@@ -84,7 +86,7 @@ function EnhancedTableHead(props) {
         {headCells.map(headCell => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align={headCell.numeric ? 'right' : 'center'}
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -116,7 +118,7 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
-
+/*
 const useToolbarStyles = makeStyles(theme => ({
   root: {
     paddingLeft: theme.spacing(2),
@@ -142,7 +144,7 @@ const useToolbarStyles = makeStyles(theme => ({
     flex: '0 0 auto',
   },
 }));
-/*
+
 const EnhancedTableToolbar = props => {
   const classes = useToolbarStyles();
   const { numSelected } = props;
@@ -226,6 +228,13 @@ const TableList= (props) => {
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
+  const [table, setTable] = useState([]);
+  const getTable = async() => {
+    const response = await fetch(`${props.match.url}`);
+    const body = await response.json();
+    return body;
+  }
+  
   const handleRequestSort = (event, property) => {
     const isDesc = orderBy === property && order === 'desc';
     setOrder(isDesc ? 'asc' : 'desc');
@@ -234,7 +243,7 @@ const TableList= (props) => {
 
   const handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelecteds = rows.map(n => n.name);
+      const newSelecteds = table.map(n => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -276,14 +285,8 @@ const TableList= (props) => {
 
   const isSelected = name => selected.indexOf(name) !== -1;
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, table.length - page * rowsPerPage);
   
-  const [table, setTable] = useState([]);
-  const getTable = async() => {
-    const response = await fetch(`${props.match.url}`);
-    const body = await response.json();
-    return body;
-  }
   useEffect(()=>{
     getTable()
         .then(res => setTable(res)) //setState
@@ -308,7 +311,7 @@ const TableList= (props) => {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={table.length}
             />
             <TableBody>
               {stableSort(table, getSorting(order, orderBy))
@@ -335,16 +338,15 @@ const TableList= (props) => {
                         />
                       </TableCell>
                       */}
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.sido}
-                      </TableCell>
-                      <TableCell align="right">{row.sigungu}</TableCell>
-                      <TableCell align="right">{row.dong}</TableCell>
-                      <TableCell align="right">{row.street}</TableCell>
+                      <TableCell align="center" component="th" id={labelId} scope="row" padding="none">{row.sido}</TableCell>
+                      <TableCell align="center">{row.sigungu}</TableCell>
+                      <TableCell align="center">{row.dong}</TableCell>
+                      <TableCell align="center">{row.street}</TableCell>
                       <TableCell align="right">{row.mainNum}</TableCell>
                       <TableCell align="right">{row.subNum===0? "":row.subNum}</TableCell>
-                      <TableCell align="right">{row.building}</TableCell>
-                      <TableCell align="right">{row.buildingDetail}</TableCell>
+                      <TableCell align="center">{row.building}</TableCell>
+                      <TableCell align="center">{row.buildingDetail}</TableCell>
+                      <TableCell align="center"><MapModal info = {row} key={row.id+row.mainNum}/></TableCell>
                     </TableRow>
                   );
                 })}
@@ -358,10 +360,11 @@ const TableList= (props) => {
             </TableBody>
           </Table>
         </div>
+        {}
         <TablePagination
           rowsPerPageOptions={[5, 10, 20]}
           component="div"
-          count={rows.length}
+          count={table.length}
           rowsPerPage={rowsPerPage}
           page={page}
           backIconButtonProps={{

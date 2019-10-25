@@ -7,8 +7,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 //app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded({ extended: true }));
-
-const data = fs.readFileSync("./db-config.json");
+const data = fs.readFileSync("./client/src/config/db-config.json");
 /*
 // db-config.json
 {
@@ -19,9 +18,9 @@ const data = fs.readFileSync("./db-config.json");
     "database" : "example"
 }
 */
+app.listen(port, () => console.log(`Listening on port ${port}`));
 const conf = JSON.parse(data);
 const mysql = require('mysql');
-
 const multer = require('multer');   //multer 라이브러리 중복되지 않는 형태로 업로드
 const upload = multer({dest: './upload'})
 
@@ -87,4 +86,3 @@ app.get('/address/:sigungu/:dong/:street', (req, res) => {
         res.send(rows);
     })
 });
-app.listen(port, () => console.log(`Listening on port ${port}`));

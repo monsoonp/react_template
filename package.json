@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "cd client && yarn start",
-    "server": "nodemom server.js",
+    "server": "yarn run nodemon server.js",
     "dev": "concurrently --kill-others-on-fai; \"yarn server\" \"yarn client\""
   },
   "devDependencies": {
